@@ -1,8 +1,9 @@
 version: '3.3'
 
 services:
+
   microservice:
-    image: sumelms/microservice-classroom
+    image: sumelms/sumelms-classroom
     ports:
       - "8080:8080"
     deploy:
