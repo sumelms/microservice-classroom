@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/sumelms/microservice-classroom/internal/lesson"
 	"net/http"
 	"os"
 	"os/signal"
@@ -66,6 +67,7 @@ func main() {
 		// Initializing the services
 		classroom.NewHTTPService(router, db, httpLogger)
 		subscription.NewHTTPService(router, db, httpLogger)
+		lesson.NewHTTPService(router, db, httpLogger)
 
 		// Handle the router
 		srv.Handle("/", router)

@@ -8,6 +8,7 @@ import (
 	"github.com/jinzhu/gorm"
 
 	classroom "github.com/sumelms/microservice-classroom/internal/classroom/database"
+	lesson "github.com/sumelms/microservice-classroom/internal/lesson/database"
 	subscription "github.com/sumelms/microservice-classroom/internal/subscription/database"
 	"github.com/sumelms/microservice-classroom/pkg/config"
 	database "github.com/sumelms/microservice-classroom/pkg/database/gorm"
@@ -56,5 +57,6 @@ func allSeeds() []seed.Seed {
 	return []seed.Seed{
 		classroom.Classrooms(),
 		subscription.Subscriptions(),
+		lesson.Lessons(),
 	}
 }
