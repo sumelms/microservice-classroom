@@ -5,11 +5,11 @@ import (
 	"github.com/sumelms/microservice-classroom/pkg/seed"
 )
 
-func Classrooms() seed.Seed {
+func ClassroomLessons() seed.Seed {
 	return seed.Seed{
-		Name: "CreateClassrooms",
+		Name: "CreateClassroomLessons",
 		Run: func(db *gorm.DB) error {
-			u := &Classroom{}
+			u := &ClassroomLesson{}
 			return db.Create(u).Error
 		},
 	}

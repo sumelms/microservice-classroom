@@ -3,12 +3,12 @@ package endpoints
 import (
 	"context"
 	"fmt"
+	"github.com/sumelms/microservice-classroom/internal/classroom/domain"
 	"net/http"
 
 	"github.com/go-kit/kit/endpoint"
 	kithttp "github.com/go-kit/kit/transport/http"
 	"github.com/gorilla/mux"
-	"github.com/sumelms/microservice-classroom/internal/classroom/domain"
 )
 
 type deleteClassroomRequest struct {

@@ -3,13 +3,13 @@ package endpoints
 import (
 	"context"
 	"fmt"
+	"github.com/sumelms/microservice-classroom/internal/classroom/domain"
 	"net/http"
 	"time"
 
 	"github.com/go-kit/kit/endpoint"
 	kithttp "github.com/go-kit/kit/transport/http"
 	"github.com/gorilla/mux"
-	"github.com/sumelms/microservice-classroom/internal/classroom/domain"
 )
 
 type findClassroomRequest struct {
@@ -19,9 +19,9 @@ type findClassroomRequest struct {
 type findClassroomResponse struct {
 	UUID        string    `json:"uuid"`
 	Title       string    `json:"title"`
-	Subtitle    string    `json:"subtitle"`
-	Excerpt     string    `json:"excerpt"`
 	Description string    `json:"description"`
+	SubjectID   string    `json:"subject_id"`
+	CourseID    string    `json:"course_id"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 }
@@ -50,8 +50,8 @@ func makeFindClassroomEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
 		return &findClassroomResponse{
 			UUID:        c.UUID,
 			Title:       c.Title,
-			Subtitle:    c.Subtitle,
-			Excerpt:     c.Excerpt,
+			SubjectID:   c.SubjectID,
+			CourseID:    c.CourseID,
 			Description: c.Description,
 		}, nil
 	}

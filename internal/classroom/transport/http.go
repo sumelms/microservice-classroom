@@ -1,6 +1,7 @@
 package transport
 
 import (
+	"github.com/sumelms/microservice-classroom/internal/classroom/domain"
 	"net/http"
 
 	"github.com/sumelms/microservice-classroom/internal/classroom/endpoints"
@@ -10,7 +11,6 @@ import (
 	kittransport "github.com/go-kit/kit/transport"
 	kithttp "github.com/go-kit/kit/transport/http"
 	"github.com/gorilla/mux"
-	"github.com/sumelms/microservice-classroom/internal/classroom/domain"
 )
 
 func NewHTTPHandler(r *mux.Router, s domain.ServiceInterface, logger log.Logger) {

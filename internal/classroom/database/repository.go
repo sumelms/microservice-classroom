@@ -2,7 +2,6 @@ package database
 
 import (
 	"errors"
-
 	"github.com/go-kit/kit/log"
 	"github.com/jinzhu/gorm"
 	"github.com/sumelms/microservice-classroom/internal/classroom/domain"

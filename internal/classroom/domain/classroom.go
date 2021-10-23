@@ -1,14 +1,16 @@
 package domain
 
-import "time"
+import (
+	"time"
+)
 
 type Classroom struct {
 	ID          uint
 	UUID        string
 	Title       string
-	Subtitle    string
-	Excerpt     string
 	Description string
+	SubjectID   string
+	CourseID    string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	DeletedAt   *time.Time

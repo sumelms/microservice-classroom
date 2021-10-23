@@ -1,4 +1,4 @@
-package classroom
+package classroomlesson
 
 import (
 	"github.com/go-kit/kit/log"

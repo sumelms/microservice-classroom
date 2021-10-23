@@ -7,17 +7,15 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// Classroom struct
-type Classroom struct {
+// ClassroomLesson struct
+type ClassroomLesson struct {
 	gorm.Model
 	UUID        uuid.UUID `gorm:"primary_key;type:uuid;default:uuid_generate_v4()"`
-	Title       string    `gorm:"size:100"`
-	Description string    `gorm:"size:255"`
-	SubjectID   uuid.UUID `gorm:"type:uuid" sql:"index"`
-	CourseID    uuid.UUID `gorm:"type:uuid" sql:"index"`
+	ClassroomID uuid.UUID `gorm:"type:uuid" sql:"index"`
+	LessonID    uuid.UUID `gorm:"type:uuid" sql:"index"`
 }
 
-func (c *Classroom) BeforeCreate(scope *gorm.Scope) error {
+func (c *ClassroomLesson) BeforeCreate(scope *gorm.Scope) error {
 	id, err := uuid.NewUUID()
 	if err != nil {
 		return err
@@ -38,7 +36,7 @@ func (c *Classroom) BeforeCreate(scope *gorm.Scope) error {
 	return nil
 }
 
-func (c *Classroom) BeforeUpdate(scope *gorm.Scope) error {
+func (c *ClassroomLesson) BeforeUpdate(scope *gorm.Scope) error {
 	err := scope.SetColumn("UpdatedAt", time.Now())
 	if err != nil {
 		scope.Log("BeforeUpdate error: %v", err)

@@ -1,6 +1,6 @@
 package domain
 
-type Repository interface {
+type RepositoryInterface interface {
 	Create(*Classroom) (Classroom, error)
 	Find(string) (Classroom, error)
 	Update(*Classroom) (Classroom, error)

@@ -2,11 +2,11 @@ package endpoints
 
 import (
 	"context"
+	"github.com/sumelms/microservice-classroom/internal/classroom/domain"
 	"net/http"
 
 	"github.com/go-kit/kit/endpoint"
 	kithttp "github.com/go-kit/kit/transport/http"
-	"github.com/sumelms/microservice-classroom/internal/classroom/domain"
 )
 
 type listClassroomResponse struct {
@@ -35,9 +35,9 @@ func makeListClassroomEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
 			list = append(list, findClassroomResponse{
 				UUID:        c.UUID,
 				Title:       c.Title,
-				Subtitle:    c.Subtitle,
-				Excerpt:     c.Excerpt,
 				Description: c.Description,
+				SubjectID:   c.SubjectID,
+				CourseID:    c.CourseID,
 				CreatedAt:   c.CreatedAt,
 				UpdatedAt:   c.UpdatedAt,
 			})
