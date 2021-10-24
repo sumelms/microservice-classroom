@@ -2,24 +2,23 @@ package main
 
 import (
 	"context"
-	"github.com/sumelms/microservice-classroom/internal/classroomlesson"
-	"github.com/sumelms/microservice-classroom/internal/lesson"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
+	"github.com/sumelms/microservice-classroom/internal/classroom"
+	"github.com/sumelms/microservice-classroom/internal/classroomlesson"
+	"github.com/sumelms/microservice-classroom/internal/lesson"
 	"github.com/sumelms/microservice-classroom/internal/subscription"
 
-	"github.com/gorilla/mux"
-	"github.com/sumelms/microservice-classroom/internal/classroom"
-
 	"github.com/go-kit/kit/log"
+	"github.com/gorilla/mux"
 	"github.com/sumelms/microservice-classroom/pkg/config"
-	database "github.com/sumelms/microservice-classroom/pkg/database/gorm"
 	"golang.org/x/sync/errgroup"
 
+	database "github.com/sumelms/microservice-classroom/pkg/database/gorm"
 	applogger "github.com/sumelms/microservice-classroom/pkg/logger"
 
 	_ "github.com/lib/pq"
