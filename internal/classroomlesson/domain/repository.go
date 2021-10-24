@@ -5,5 +5,5 @@ type Repository interface {
 	Find(string) (ClassroomLesson, error)
 	Update(*ClassroomLesson) (ClassroomLesson, error)
 	Delete(string) error
-	List() ([]ClassroomLesson, error)
+	List(map[string]interface{}) ([]ClassroomLesson, error)
 }

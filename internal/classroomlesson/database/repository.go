@@ -29,10 +29,10 @@ func NewRepository(db *gorm.DB, logger log.Logger) *Repository {
 }
 
 // List classroomlessons
-func (r *Repository) List() ([]domain.ClassroomLesson, error) {
+func (r *Repository) List(filters map[string]interface{}) ([]domain.ClassroomLesson, error) {
 	var classrooms []ClassroomLesson
 
-	query := r.db.Find(&classrooms)
+	query := r.db.Find(&classrooms, filters)
 	if query.RecordNotFound() {
 		return []domain.ClassroomLesson{}, nil
 	}

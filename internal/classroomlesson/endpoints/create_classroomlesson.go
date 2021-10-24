@@ -57,6 +57,8 @@ func makeCreateClassroomLessonEndpoint(s domain.ServiceInterface) endpoint.Endpo
 		if err != nil {
 			return nil, err
 		}
+		c.ClassroomID = req.ClassroomID
+		c.LessonID = req.LessonID
 
 		created, err := s.CreateClassroomLesson(ctx, &c)
 		if err != nil {

@@ -2,12 +2,18 @@ package endpoints
 
 import (
 	"context"
+	"fmt"
 	"github.com/sumelms/microservice-classroom/internal/classroomlesson/domain"
 	"net/http"
 
 	"github.com/go-kit/kit/endpoint"
 	kithttp "github.com/go-kit/kit/transport/http"
 )
+
+type listClassroomLessonRequest struct {
+	ClassroomID string `json:"classroom_id,omitempty"`
+	LessonID    string `json:"lesson_id,omitempty"`
+}
 
 type listClassroomLessonResponse struct {
 	ClassroomLessons []findClassroomLessonResponse `json:"classroom_lessons"`
@@ -24,7 +30,20 @@ func NewListClassroomLessonHandler(s domain.ServiceInterface, opts ...kithttp.Se
 
 func makeListClassroomLessonEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		classrooms, err := s.ListClassroomLesson(ctx)
+		req, ok := request.(listClassroomLessonRequest)
+		if !ok {
+			return nil, fmt.Errorf("invalid argument")
+		}
+
+		filters := make(map[string]interface{})
+		if len(req.ClassroomID) > 0 {
+			filters["classroom_id"] = req.ClassroomID
+		}
+		if len(req.LessonID) > 0 {
+			filters["lesson_id"] = req.LessonID
+		}
+
+		classrooms, err := s.ListClassroomLesson(ctx, filters)
 		if err != nil {
 			return nil, err
 		}
@@ -47,8 +66,10 @@ func makeListClassroomLessonEndpoint(s domain.ServiceInterface) endpoint.Endpoin
 	}
 }
 
-func decodeListClassroomLessonRequest(_ context.Context, _ *http.Request) (interface{}, error) {
-	return nil, nil
+func decodeListClassroomLessonRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	classroomID := r.FormValue("classroom_id")
+	lessonID := r.FormValue("lesson_id")
+	return listClassroomLessonRequest{ClassroomID: classroomID, LessonID: lessonID}, nil
 }
 
 func encodeListClassroomLessonResponse(ctx context.Context, w http.ResponseWriter, response interface{}) error {
