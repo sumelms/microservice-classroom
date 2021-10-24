@@ -17,19 +17,19 @@ import (
 )
 
 type updateSubscriptionRequest struct {
-	ID         string     `json:"id" validate:"required"`
-	UserID     string     `json:"user_id" validate:"required"`
-	ClassroomID   string     `json:"classroom_id" validate:"required"`
-	ValidUntil *time.Time `json:"valid_until"`
+	UUID        string `json:"uuid" validate:"required"`
+	UserID      string `json:"user_id" validate:"required"`
+	ClassroomID string `json:"classroom_id" validate:"required"`
+	Role        string `json:"role"`
 }
 
 type updateSubscriptionResponse struct {
-	ID         uint       `json:"id"`
-	UserID     string     `json:"user_id"`
-	ClassroomID   string     `json:"classroom_id"`
-	ValidUntil *time.Time `json:"valid_until"`
-	CreatedAt  time.Time  `json:"created_at"`
-	UpdatedAt  time.Time  `json:"updated_at"`
+	UUID        string    `json:"uuid"`
+	UserID      string    `json:"user_id"`
+	ClassroomID string    `json:"classroom_id"`
+	Role        string    `json:"role"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
 }
 
 func NewUpdateSubscriptionHandler(s domain.ServiceInterface, opts ...kithttp.ServerOption) *kithttp.Server {
@@ -59,14 +59,18 @@ func makeUpdateSubscriptionEndpoint(s domain.ServiceInterface) endpoint.Endpoint
 		if err != nil {
 			return nil, err
 		}
+		sub.UserID = req.UserID
+		sub.ClassroomID = req.ClassroomID
+
+		updated, err := s.UpdateSubscription(ctx, &sub)
 
 		return updateSubscriptionResponse{
-			ID:         sub.ID,
-			UserID:     sub.UserID,
-			ClassroomID:   sub.ClassroomID,
-			ValidUntil: sub.ValidUntil,
-			CreatedAt:  sub.CreatedAt,
-			UpdatedAt:  sub.UpdatedAt,
+			UUID:        updated.UUID,
+			UserID:      updated.UserID,
+			ClassroomID: updated.ClassroomID,
+			Role:        updated.Role,
+			CreatedAt:   updated.CreatedAt,
+			UpdatedAt:   updated.UpdatedAt,
 		}, nil
 	}
 }
@@ -84,7 +88,7 @@ func decodeUpdateSubscriptionRequest(ctx context.Context, r *http.Request) (inte
 		return nil, err
 	}
 
-	req.ID = id
+	req.UUID = id
 
 	return req, nil
 }

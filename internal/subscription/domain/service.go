@@ -13,8 +13,6 @@ type ServiceInterface interface {
 	FindSubscription(context.Context, string) (Subscription, error)
 	UpdateSubscription(context.Context, *Subscription) (Subscription, error)
 	DeleteSubscription(context.Context, string) error
-	FindSubscriptionByClassroom(context.Context, string) ([]Subscription, error)
-	FindSubscriptionByUser(context.Context, string) ([]Subscription, error)
 }
 
 type Service struct {
@@ -67,20 +65,4 @@ func (s *Service) DeleteSubscription(ctx context.Context, id string) error {
 		return fmt.Errorf("Service can't delete subscription: %w", err)
 	}
 	return nil
-}
-
-func (s *Service) FindSubscriptionByClassroom(ctx context.Context, id string) ([]Subscription, error) {
-	list, err := s.repo.FindBy("classroom_id", id)
-	if err != nil {
-		return []Subscription{}, fmt.Errorf("Service can't find subscriptions to classroom %s: %w", id, err)
-	}
-	return list, nil
-}
-
-func (s *Service) FindSubscriptionByUser(ctx context.Context, id string) ([]Subscription, error) {
-	list, err := s.repo.FindBy("user_id", id)
-	if err != nil {
-		return []Subscription{}, fmt.Errorf("Service can't find subscriptions to user %s: %w", id, err)
-	}
-	return list, nil
 }

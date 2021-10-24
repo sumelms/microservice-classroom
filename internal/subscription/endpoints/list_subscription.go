@@ -12,7 +12,8 @@ import (
 
 type listSubscriptionRequest struct {
 	ClassroomID string `json:"classroom_id"`
-	UserID   string `json:"user_id"`
+	UserID      string `json:"user_id"`
+	Role        string `json:"role"`
 }
 
 type listSubscriptionResponse struct {
@@ -42,6 +43,9 @@ func makeListSubscriptionEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
 		if len(req.UserID) > 0 {
 			filters["user_id"] = req.UserID
 		}
+		if len(req.Role) > 0 {
+			filters["role"] = req.Role
+		}
 
 		subscriptions, err := s.ListSubscription(ctx, filters)
 		if err != nil {
@@ -51,12 +55,12 @@ func makeListSubscriptionEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
 		var list []findSubscriptionResponse
 		for _, sub := range subscriptions {
 			list = append(list, findSubscriptionResponse{
-				ID:         sub.ID,
-				UserID:     sub.UserID,
-				ClassroomID:   sub.ClassroomID,
-				ValidUntil: sub.ValidUntil,
-				CreatedAt:  sub.CreatedAt,
-				UpdatedAt:  sub.UpdatedAt,
+				UUID:        sub.UUID,
+				UserID:      sub.UserID,
+				ClassroomID: sub.ClassroomID,
+				Role:        sub.Role,
+				CreatedAt:   sub.CreatedAt,
+				UpdatedAt:   sub.UpdatedAt,
 			})
 		}
 
@@ -67,9 +71,11 @@ func makeListSubscriptionEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
 func decodeListSubscriptionRequest(ctx context.Context, r *http.Request) (interface{}, error) {
 	classroomID := r.FormValue("classroom_id")
 	userID := r.FormValue("user_id")
+	role := r.FormValue("role")
 	return listSubscriptionRequest{
 		ClassroomID: classroomID,
-		UserID:   userID,
+		UserID:      userID,
+		Role:        role,
 	}, nil
 }
 

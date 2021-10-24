@@ -10,27 +10,34 @@ import (
 
 type Subscription struct {
 	gorm.Model
-	UserID     uuid.UUID  `gorm:"type:uuid" sql:"index"`
-	ClassroomID   uuid.UUID  `gorm:"type:uuid" sql:"index"`
-	ValidUntil *time.Time `sql:"index"`
+	UUID        uuid.UUID `gorm:"primary_key;type:uuid;default:uuid_generate_v4()"`
+	UserID      uuid.UUID `gorm:"type:uuid" sql:"index"`
+	ClassroomID uuid.UUID `gorm:"type:uuid" sql:"index"`
+	Role        string    `gorm:"size:144"`
 }
 
-func (s *Subscription) BeforeCreate(scope *gorm.Scope) error {
-	if s.UpdatedAt.IsZero() {
-		err := scope.SetColumn("UpdatedAt", time.Now())
+func (c *Subscription) BeforeCreate(scope *gorm.Scope) error {
+	id, err := uuid.NewUUID()
+	if err != nil {
+		return err
+	}
+	scope.SetColumn("UUID", id.String()) // nolint: errcheck
+
+	if c.UpdatedAt.IsZero() {
+		err = scope.SetColumn("UpdatedAt", time.Now())
 		if err != nil {
 			scope.Log("BeforeCreate error: %v", err)
 		}
 	}
 
-	err := scope.SetColumn("CreatedAt", time.Now())
+	err = scope.SetColumn("CreatedAt", time.Now())
 	if err != nil {
 		scope.Log("BeforeCreate error: %v", err)
 	}
 	return nil
 }
 
-func (s *Subscription) BeforeUpdate(scope *gorm.Scope) error {
+func (c *Subscription) BeforeUpdate(scope *gorm.Scope) error {
 	err := scope.SetColumn("UpdatedAt", time.Now())
 	if err != nil {
 		scope.Log("BeforeUpdate error: %v", err)

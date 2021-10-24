@@ -4,10 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/http"
-	"time"
-
 	"github.com/sumelms/microservice-classroom/pkg/validator"
+	"net/http"
 
 	"github.com/go-kit/kit/endpoint"
 	kithttp "github.com/go-kit/kit/transport/http"
@@ -15,17 +13,16 @@ import (
 )
 
 type createSubscriptionRequest struct {
-	UserID     string     `json:"user_id" validate:"required"`
-	ClassroomID   string     `json:"classroom_id" validate:"required"`
-	MatrixID   string     `json:"matrix_id" validate:"required"`
-	ValidUntil *time.Time `json:"valid_until"`
+	UserID      string `json:"user_id" validate:"required"`
+	ClassroomID string `json:"classroom_id" validate:"required"`
+	Role        string `json:"role"`
 }
 
 type createSubscriptionResponse struct {
-	UserID     string     `json:"user_id"`
-	ClassroomID   string     `json:"classroom_id"`
-	MatrixID   string     `json:"matrix_id"`
-	ValidUntil *time.Time `json:"valid_until"`
+	UUID        string `json:"uuid"`
+	UserID      string `json:"user_id"`
+	ClassroomID string `json:"classroom_id"`
+	Role        string `json:"role"`
 }
 
 func NewCreateSubscriptionHandler(s domain.ServiceInterface, opts ...kithttp.ServerOption) *kithttp.Server {
@@ -55,6 +52,8 @@ func makeCreateSubscriptionEndpoint(s domain.ServiceInterface) endpoint.Endpoint
 		if err != nil {
 			return nil, err
 		}
+		sub.UserID = req.UserID
+		sub.ClassroomID = req.ClassroomID
 
 		created, err := s.CreateSubscription(ctx, &sub)
 		if err != nil {
@@ -62,9 +61,10 @@ func makeCreateSubscriptionEndpoint(s domain.ServiceInterface) endpoint.Endpoint
 		}
 
 		return createSubscriptionResponse{
-			UserID:     created.UserID,
-			ClassroomID:   created.ClassroomID,
-			ValidUntil: created.ValidUntil,
+			UUID:        created.UUID,
+			UserID:      created.UserID,
+			ClassroomID: created.ClassroomID,
+			Role:        created.Role,
 		}, nil
 	}
 }

@@ -2,8 +2,6 @@ package database
 
 import (
 	"errors"
-	"fmt"
-
 	"github.com/go-kit/kit/log"
 	"github.com/jinzhu/gorm"
 	"github.com/sumelms/microservice-classroom/internal/subscription/domain"
@@ -11,7 +9,7 @@ import (
 )
 
 const (
-	whereSubscriptionID = "ID = ?"
+	whereSubscriptionID = "UUID = ?"
 )
 
 type Repository struct {
@@ -51,7 +49,7 @@ func (r *Repository) Find(id string) (domain.Subscription, error) {
 func (r *Repository) Update(s *domain.Subscription) (domain.Subscription, error) {
 	var subscription Subscription
 
-	query := r.db.Where(whereSubscriptionID, s.ID).First(&subscription)
+	query := r.db.Where(whereSubscriptionID, s.UUID).First(&subscription)
 
 	if query.RecordNotFound() {
 		return domain.Subscription{}, merrors.NewErrorf(merrors.ErrCodeNotFound, "subscription not found")
@@ -84,27 +82,6 @@ func (r *Repository) List(filters map[string]interface{}) ([]domain.Subscription
 	query := r.db.Find(&subscriptions, filters)
 	if query.RecordNotFound() {
 		return []domain.Subscription{}, nil
-	}
-
-	var list []domain.Subscription
-	for i := range subscriptions {
-		s := subscriptions[i]
-		list = append(list, toDomainModel(&s))
-	}
-
-	return list, nil
-}
-
-func (r *Repository) FindBy(field string, value interface{}) ([]domain.Subscription, error) {
-	var subscriptions []Subscription
-
-	where := fmt.Sprintf("%s = ?", field)
-	query := r.db.Where(where, value).Find(&subscriptions)
-	if query.RecordNotFound() {
-		return []domain.Subscription{}, nil
-	}
-	if err := query.Error; err != nil {
-		return []domain.Subscription{}, merrors.WrapErrorf(err, merrors.ErrCodeNotFound, fmt.Sprintf("find subscriptions by %s", field))
 	}
 
 	var list []domain.Subscription

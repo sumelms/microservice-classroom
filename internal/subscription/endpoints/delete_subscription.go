@@ -13,7 +13,7 @@ import (
 )
 
 type deleteSubscriptionRequest struct {
-	ID string `json:"id" validate:"required"`
+	UUID string `json:"uuid" validate:"required"`
 }
 
 func NewDeleteSubscriptionHandler(s domain.ServiceInterface, opts ...kithttp.ServerOption) *kithttp.Server {
@@ -32,7 +32,7 @@ func makeDeleteSubscriptionEndpoint(s domain.ServiceInterface) endpoint.Endpoint
 			return nil, fmt.Errorf("invalid argument")
 		}
 
-		err := s.DeleteSubscription(ctx, req.ID)
+		err := s.DeleteSubscription(ctx, req.UUID)
 		if err != nil {
 			return nil, err
 		}
@@ -48,7 +48,7 @@ func decodeDeleteSubscriptionRequest(ctx context.Context, r *http.Request) (inte
 		return nil, fmt.Errorf("invalid argument")
 	}
 
-	return deleteSubscriptionRequest{ID: id}, nil
+	return deleteSubscriptionRequest{UUID: id}, nil
 }
 
 func encodeDeleteSubscriptionResponse(ctx context.Context, w http.ResponseWriter, response interface{}) error {

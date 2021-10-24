@@ -3,11 +3,12 @@ package domain
 import "time"
 
 type Subscription struct {
-	ID         uint
-	UserID     string
-	ClassroomID   string
-	ValidUntil *time.Time
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
-	DeletedAt  *time.Time
+	ID          uint
+	UUID        string
+	UserID      string
+	ClassroomID string
+	Role        string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	DeletedAt   *time.Time
 }

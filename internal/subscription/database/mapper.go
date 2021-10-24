@@ -7,12 +7,13 @@ import (
 
 func toDBModel(entity *domain.Subscription) Subscription {
 	s := Subscription{
-		UserID:   uuid.MustParse(entity.UserID),
+		UserID:      uuid.MustParse(entity.UserID),
 		ClassroomID: uuid.MustParse(entity.ClassroomID),
+		Role:        entity.Role,
 	}
 
-	if !entity.ValidUntil.IsZero() {
-		s.ValidUntil = entity.ValidUntil
+	if len(entity.UUID) > 0 {
+		s.UUID = uuid.MustParse(entity.UUID)
 	}
 
 	if entity.ID > 0 {
@@ -31,12 +32,13 @@ func toDBModel(entity *domain.Subscription) Subscription {
 
 func toDomainModel(entity *Subscription) domain.Subscription {
 	return domain.Subscription{
-		ID:         entity.ID,
-		UserID:     entity.UserID.String(),
-		ClassroomID:   entity.ClassroomID.String(),
-		ValidUntil: entity.ValidUntil,
-		CreatedAt:  entity.CreatedAt,
-		UpdatedAt:  entity.UpdatedAt,
-		DeletedAt:  entity.DeletedAt,
+		ID:          entity.ID,
+		UUID:        entity.UUID.String(),
+		UserID:      entity.UserID.String(),
+		ClassroomID: entity.ClassroomID.String(),
+		Role:        entity.Role,
+		CreatedAt:   entity.CreatedAt,
+		UpdatedAt:   entity.UpdatedAt,
+		DeletedAt:   entity.DeletedAt,
 	}
 }

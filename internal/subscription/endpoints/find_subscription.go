@@ -15,16 +15,16 @@ import (
 )
 
 type findSubscriptionRequest struct {
-	ID string `json:"id"`
+	UUID string `json:"uuid"`
 }
 
 type findSubscriptionResponse struct {
-	ID         uint       `json:"id"`
-	UserID     string     `json:"user_id"`
-	ClassroomID   string     `json:"classroom_id"`
-	ValidUntil *time.Time `json:"valid_until,omitempty"`
-	CreatedAt  time.Time  `json:"created_at"`
-	UpdatedAt  time.Time  `json:"updated_at"`
+	UUID        string    `json:"uuid"`
+	UserID      string    `json:"user_id"`
+	ClassroomID string    `json:"classroom_id"`
+	Role        string    `json:"role"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
 }
 
 func NewFindSubscriptionHandler(s domain.ServiceInterface, opts ...kithttp.ServerOption) *kithttp.Server {
@@ -43,30 +43,30 @@ func makeFindSubscriptionEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
 			return nil, fmt.Errorf("invalid argument")
 		}
 
-		sub, err := s.FindSubscription(ctx, req.ID)
+		sub, err := s.FindSubscription(ctx, req.UUID)
 		if err != nil {
 			return nil, err
 		}
 
 		return &findSubscriptionResponse{
-			ID:         sub.ID,
-			UserID:     sub.UserID,
-			ClassroomID:   sub.ClassroomID,
-			ValidUntil: sub.ValidUntil,
-			CreatedAt:  sub.CreatedAt,
-			UpdatedAt:  sub.UpdatedAt,
+			UUID:        sub.UUID,
+			UserID:      sub.UserID,
+			ClassroomID: sub.ClassroomID,
+			Role:        sub.Role,
+			CreatedAt:   sub.CreatedAt,
+			UpdatedAt:   sub.UpdatedAt,
 		}, nil
 	}
 }
 
 func decodeFindSubscriptionRequest(ctx context.Context, r *http.Request) (interface{}, error) {
 	vars := mux.Vars(r)
-	id, ok := vars["id"]
+	id, ok := vars["uuid"]
 	if !ok {
 		return nil, fmt.Errorf("invalid argument")
 	}
 
-	return findSubscriptionRequest{ID: id}, nil
+	return findSubscriptionRequest{UUID: id}, nil
 }
 
 func encodeFindSubscriptionResponse(ctx context.Context, w http.ResponseWriter, response interface{}) error {

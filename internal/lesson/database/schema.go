@@ -7,7 +7,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// lesson struct
+// Lesson struct
 type Lesson struct {
 	gorm.Model
 	UUID        uuid.UUID `gorm:"primary_key;type:uuid;default:uuid_generate_v4()"`
