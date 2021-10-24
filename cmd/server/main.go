@@ -84,7 +84,7 @@ func main() {
 			WriteTimeout: 10 * time.Second,
 		}
 
-		if err := httpServer.ListenAndServe(); err != http.ErrServerClosed'' {
+		if err := httpServer.ListenAndServe(); err != http.ErrServerClosed {
 			return err
 		}
 		return nil
