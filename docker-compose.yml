@@ -1,8 +1,9 @@
 version: '3.3'
 
 services:
+
   microservice:
-    image: sumelms/microservice-classroom
+    image: sumelms/sumelms-classroom
     ports:
       - "8080:8080"
     deploy:
@@ -20,6 +21,7 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=sumelms_classroom
     ports:
       - "5432:5432"
     volumes:
