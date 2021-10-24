@@ -9,6 +9,8 @@ type Lesson struct {
 	Subtitle    string
 	Excerpt     string
 	Description string
+	Module      string
+	SubjectID   string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	DeletedAt   *time.Time

@@ -8,7 +8,7 @@ import (
 )
 
 type ServiceInterface interface {
-	ListLesson(context.Context) ([]Lesson, error)
+	ListLesson(context.Context, map[string]interface{}) ([]Lesson, error)
 	CreateLesson(context.Context, *Lesson) (Lesson, error)
 	FindLesson(context.Context, string) (Lesson, error)
 	UpdateLesson(context.Context, *Lesson) (Lesson, error)
@@ -27,8 +27,8 @@ func NewService(repo Repository, logger log.Logger) *Service {
 	}
 }
 
-func (s *Service) ListLesson(_ context.Context) ([]Lesson, error) {
-	cs, err := s.repo.List()
+func (s *Service) ListLesson(_ context.Context, filters map[string]interface{}) ([]Lesson, error) {
+	cs, err := s.repo.List(filters)
 	if err != nil {
 		return []Lesson{}, fmt.Errorf("Service didn't found any lesson: %w", err)
 	}

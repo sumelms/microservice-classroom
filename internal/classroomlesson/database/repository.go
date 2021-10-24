@@ -18,7 +18,7 @@ type Repository struct {
 	logger log.Logger
 }
 
-// NewRepository creates a new profile repository
+// NewRepository creates a new lesson repository
 func NewRepository(db *gorm.DB, logger log.Logger) *Repository {
 	db.AutoMigrate(&ClassroomLesson{})
 
@@ -92,7 +92,7 @@ func (r *Repository) Update(c *domain.ClassroomLesson) (domain.ClassroomLesson, 
 	return *c, nil
 }
 
-// Delete a classroom by its ID
+// Delete a classroomlesson by its ID
 func (r *Repository) Delete(id string) error {
 	query := r.db.Where(whereClassroomLessonUUID, id).Delete(&ClassroomLesson{})
 

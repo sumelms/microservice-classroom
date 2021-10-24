@@ -19,7 +19,7 @@ type Repository struct {
 	logger log.Logger
 }
 
-// NewRepository creates a new profile repository
+// NewRepository creates a new lesson repository
 func NewRepository(db *gorm.DB, logger log.Logger) *Repository {
 	db.AutoMigrate(&Lesson{})
 
@@ -29,11 +29,11 @@ func NewRepository(db *gorm.DB, logger log.Logger) *Repository {
 	}
 }
 
-// List classrooms
-func (r *Repository) List() ([]domain.Lesson, error) {
+// List lessons
+func (r *Repository) List(filters map[string]interface{}) ([]domain.Lesson, error) {
 	var lessons []Lesson
 
-	query := r.db.Find(&lessons)
+	query := r.db.Find(&lessons, filters)
 	if query.RecordNotFound() {
 		return []domain.Lesson{}, nil
 	}

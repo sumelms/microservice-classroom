@@ -9,39 +9,45 @@ import (
 
 	"github.com/go-kit/kit/endpoint"
 	kithttp "github.com/go-kit/kit/transport/http"
+	"github.com/gorilla/mux"
 	"github.com/sumelms/microservice-classroom/internal/lesson/domain"
 	"github.com/sumelms/microservice-classroom/pkg/validator"
 )
 
-type createLessonRequest struct {
+type updateLessonRequest struct {
+	UUID        string `json:"uuid" validate:"required"`
 	Title       string `json:"title" validate:"required,max=100"`
 	Subtitle    string `json:"subtitle" validate:"required,max=100"`
 	Excerpt     string `json:"excerpt" validate:"required,max=140"`
 	Description string `json:"description" validate:"required,max=255"`
+	Module      string `json:"module" validate:"max=140"`
+	SubjectID   string `json:"subject_id" validate:"required"`
 }
 
-type createLessonResponse struct {
+type updateLessonResponse struct {
 	UUID        string    `json:"uuid"`
 	Title       string    `json:"title"`
 	Subtitle    string    `json:"subtitle"`
 	Excerpt     string    `json:"excerpt"`
 	Description string    `json:"description"`
+	Module      string    `json:"module"`
+	SubjectID   string    `json:"subject_id"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 }
 
-func NewCreateLessonHandler(s domain.ServiceInterface, opts ...kithttp.ServerOption) *kithttp.Server {
+func NewUpdateLessonHandler(s domain.ServiceInterface, opts ...kithttp.ServerOption) *kithttp.Server {
 	return kithttp.NewServer(
-		makeCreateLessonEndpoint(s),
-		decodeCreateLessonRequest,
-		encodeCreateLessonResponse,
+		makeUpdateLessonEndpoint(s),
+		decodeUpdateLessonRequest,
+		encodeUpdateLessonResponse,
 		opts...,
 	)
 }
 
-func makeCreateLessonEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
+func makeUpdateLessonEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req, ok := request.(createLessonRequest)
+		req, ok := request.(updateLessonRequest)
 		if !ok {
 			return nil, fmt.Errorf("invalid argument")
 		}
@@ -57,33 +63,43 @@ func makeCreateLessonEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
 		if err != nil {
 			return nil, err
 		}
+		l.SubjectID = req.SubjectID
 
-		created, err := s.CreateLesson(ctx, &l)
+		updated, err := s.UpdateLesson(ctx, &l)
 		if err != nil {
 			return nil, err
 		}
 
-		return createLessonResponse{
-			UUID:        created.UUID,
-			Title:       created.Title,
-			Subtitle:    created.Subtitle,
-			Excerpt:     created.Excerpt,
-			Description: created.Description,
-			CreatedAt:   created.CreatedAt,
-			UpdatedAt:   created.UpdatedAt,
-		}, err
+		return updateLessonResponse{
+			UUID:        updated.UUID,
+			Title:       updated.Title,
+			Subtitle:    updated.Subtitle,
+			Excerpt:     updated.Excerpt,
+			Description: updated.Description,
+			Module:      updated.Module,
+			SubjectID:   updated.SubjectID,
+		}, nil
 	}
 }
 
-func decodeCreateLessonRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	var req createLessonRequest
+func decodeUpdateLessonRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	vars := mux.Vars(r)
+	id, ok := vars["uuid"]
+	if !ok {
+		return nil, fmt.Errorf("invalid argument")
+	}
+
+	var req updateLessonRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		return nil, err
 	}
+
+	req.UUID = id
+
 	return req, nil
 }
 
-func encodeCreateLessonResponse(ctx context.Context, w http.ResponseWriter, response interface{}) error {
+func encodeUpdateLessonResponse(ctx context.Context, w http.ResponseWriter, response interface{}) error {
 	return kithttp.EncodeJSONResponse(ctx, w, response)
 }

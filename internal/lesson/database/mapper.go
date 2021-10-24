@@ -11,6 +11,8 @@ func toDBModel(entity *domain.Lesson) Lesson {
 		Subtitle:    entity.Subtitle,
 		Excerpt:     entity.Excerpt,
 		Description: entity.Description,
+		Module:      entity.Module,
+		SubjectID:   uuid.MustParse(entity.SubjectID),
 	}
 
 	if len(entity.UUID) > 0 {
@@ -38,6 +40,8 @@ func toDomainModel(entity *Lesson) domain.Lesson {
 		Subtitle:    entity.Subtitle,
 		Excerpt:     entity.Excerpt,
 		Description: entity.Description,
+		Module:      entity.Module,
+		SubjectID:   entity.SubjectID.String(),
 		CreatedAt:   entity.CreatedAt,
 		UpdatedAt:   entity.UpdatedAt,
 		DeletedAt:   entity.DeletedAt,

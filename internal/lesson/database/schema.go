@@ -15,6 +15,8 @@ type Lesson struct {
 	Subtitle    string    `gorm:"size:100"`
 	Excerpt     string    `gorm:"size:144"`
 	Description string    `gorm:"size:255"`
+	Module      string	  `gorm:"size:155"`
+	SubjectID   uuid.UUID `gorm:"type:uuid" sql:"index"`
 }
 
 func (c *Lesson) BeforeCreate(scope *gorm.Scope) error {

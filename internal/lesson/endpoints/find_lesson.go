@@ -22,6 +22,8 @@ type findLessonResponse struct {
 	Subtitle    string    `json:"subtitle"`
 	Excerpt     string    `json:"excerpt"`
 	Description string    `json:"description"`
+	Module      string    `json:"module"`
+	SubjectID   string    `json:"subject_id"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 }
@@ -53,6 +55,8 @@ func makeFindLessonEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
 			Subtitle:    l.Subtitle,
 			Excerpt:     l.Excerpt,
 			Description: l.Description,
+			Module:      l.Module,
+			SubjectID:   l.SubjectID,
 		}, nil
 	}
 }
