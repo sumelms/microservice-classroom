@@ -61,7 +61,6 @@ func makeCreateLessonEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
 		if err != nil {
 			return nil, err
 		}
-		l.SubjectID = req.SubjectID
 
 		created, err := s.CreateLesson(ctx, &l)
 		if err != nil {

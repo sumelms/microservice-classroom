@@ -3,12 +3,12 @@ package domain
 import "time"
 
 type Subscription struct {
-	ID          uint
-	UUID        string
-	UserID      string
-	ClassroomID string
-	Role        string
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	DeletedAt   *time.Time
+	ID          uint       `json:"id"`
+	UUID        string     `json:"uuid"`
+	UserID      string     `json:"user_id"`
+	ClassroomID string     `json:"classroom_id"`
+	Role        string     `json:"role"`
+	CreatedAt   time.Time  `json:"created_at"`
+	UpdatedAt   time.Time  `json:"updated_at"`
+	DeletedAt   *time.Time `json:"deleted_at"`
 }

@@ -52,8 +52,6 @@ func makeCreateSubscriptionEndpoint(s domain.ServiceInterface) endpoint.Endpoint
 		if err != nil {
 			return nil, err
 		}
-		sub.UserID = req.UserID
-		sub.ClassroomID = req.ClassroomID
 
 		created, err := s.CreateSubscription(ctx, &sub)
 		if err != nil {

@@ -59,8 +59,6 @@ func makeUpdateSubscriptionEndpoint(s domain.ServiceInterface) endpoint.Endpoint
 		if err != nil {
 			return nil, err
 		}
-		sub.UserID = req.UserID
-		sub.ClassroomID = req.ClassroomID
 
 		updated, err := s.UpdateSubscription(ctx, &sub)
 

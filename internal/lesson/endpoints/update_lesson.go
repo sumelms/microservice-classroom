@@ -63,7 +63,6 @@ func makeUpdateLessonEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
 		if err != nil {
 			return nil, err
 		}
-		l.SubjectID = req.SubjectID
 
 		updated, err := s.UpdateLesson(ctx, &l)
 		if err != nil {
