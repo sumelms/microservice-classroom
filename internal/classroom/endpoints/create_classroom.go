@@ -4,12 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/sumelms/microservice-classroom/internal/classroom/domain"
 	"net/http"
 	"time"
 
+	"github.com/sumelms/microservice-classroom/internal/classroom/domain"
+
 	"github.com/go-kit/kit/endpoint"
 	kithttp "github.com/go-kit/kit/transport/http"
+
 	"github.com/sumelms/microservice-classroom/pkg/validator"
 )
 
@@ -58,7 +60,7 @@ func makeCreateClassroomEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
 			return nil, err
 		}
 		c.SubjectID = req.SubjectID
-		c.CourseID =  req.CourseID
+		c.CourseID = req.CourseID
 
 		created, err := s.CreateClassroom(ctx, &c)
 		if err != nil {
