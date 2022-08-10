@@ -12,17 +12,19 @@ import (
 
 	kithttp "github.com/go-kit/kit/transport/http"
 
+	"github.com/google/uuid"
+
 	"github.com/sumelms/microservice-classroom/internal/classroom/domain"
 )
 
 type findSubscriptionRequest struct {
-	UUID string `json:"uuid"`
+	UUID uuid.UUID `json:"uuid"`
 }
 
 type findSubscriptionResponse struct {
-	UUID        string    `json:"uuid"`
-	UserID      string    `json:"user_id"`
-	ClassroomID string    `json:"classroom_id"`
+	UUID        uuid.UUID `json:"uuid"`
+	UserID      uuid.UUID `json:"user_id"`
+	ClassroomID uuid.UUID `json:"classroom_id"`
 	Role        string    `json:"role"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
@@ -44,7 +46,7 @@ func makeFindSubscriptionEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
 			return nil, fmt.Errorf("invalid argument")
 		}
 
-		sub, err := s.FindSubscription(ctx, req.UUID)
+		sub, err := s.Subscription(ctx, req.UUID)
 		if err != nil {
 			return nil, err
 		}
@@ -67,7 +69,9 @@ func decodeFindSubscriptionRequest(ctx context.Context, r *http.Request) (interf
 		return nil, fmt.Errorf("invalid argument")
 	}
 
-	return findSubscriptionRequest{UUID: id}, nil
+	uid := uuid.MustParse(id)
+
+	return findSubscriptionRequest{UUID: uid}, nil
 }
 
 func encodeFindSubscriptionResponse(ctx context.Context, w http.ResponseWriter, response interface{}) error {

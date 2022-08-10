@@ -12,22 +12,24 @@ import (
 	"github.com/go-kit/kit/endpoint"
 	kithttp "github.com/go-kit/kit/transport/http"
 
+	"github.com/google/uuid"
+
 	"github.com/sumelms/microservice-classroom/pkg/validator"
 )
 
 type createClassroomRequest struct {
-	Title       string `json:"title" validate:"required,max=100"`
-	Description string `json:"description" validate:"required,max=255"`
-	SubjectID   string `json:"subject_id" validate:"required"`
-	CourseID    string `json:"course_id" validate:"required"`
+	Title       string    `json:"title" validate:"required,max=100"`
+	Description string    `json:"description" validate:"required,max=255"`
+	SubjectID   uuid.UUID `json:"subject_id" validate:"required"`
+	CourseID    uuid.UUID `json:"course_id" validate:"required"`
 }
 
 type createClassroomResponse struct {
-	UUID        string    `json:"uuid"`
+	UUID        uuid.UUID `json:"uuid"`
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
-	SubjectID   string    `json:"subject_id"`
-	CourseID    string    `json:"course_id"`
+	SubjectID   uuid.UUID `json:"subject_id"`
+	CourseID    uuid.UUID `json:"course_id"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 }

@@ -8,13 +8,15 @@ import (
 	"github.com/go-kit/kit/endpoint"
 	kithttp "github.com/go-kit/kit/transport/http"
 
+	"github.com/google/uuid"
+
 	"github.com/sumelms/microservice-classroom/internal/classroom/domain"
 )
 
 type listSubscriptionRequest struct {
-	ClassroomID string `json:"classroom_id"`
-	UserID      string `json:"user_id"`
-	Role        string `json:"role"`
+	ClassroomID uuid.UUID `json:"classroom_id"`
+	UserID      uuid.UUID `json:"user_id"`
+	Role        string    `json:"role"`
 }
 
 type listSubscriptionResponse struct {
@@ -48,7 +50,7 @@ func makeListSubscriptionEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
 			filters["role"] = req.Role
 		}
 
-		subscriptions, err := s.ListSubscription(ctx, filters)
+		subscriptions, err := s.Subscriptions(ctx)
 		if err != nil {
 			return nil, err
 		}
@@ -73,9 +75,10 @@ func decodeListSubscriptionRequest(ctx context.Context, r *http.Request) (interf
 	classroomID := r.FormValue("classroom_id")
 	userID := r.FormValue("user_id")
 	role := r.FormValue("role")
+
 	return listSubscriptionRequest{
-		ClassroomID: classroomID,
-		UserID:      userID,
+		ClassroomID: uuid.MustParse(classroomID),
+		UserID:      uuid.MustParse(userID),
 		Role:        role,
 	}, nil
 }

@@ -10,11 +10,13 @@ import (
 	"github.com/go-kit/kit/endpoint"
 	kithttp "github.com/go-kit/kit/transport/http"
 
+	"github.com/google/uuid"
+
 	"github.com/sumelms/microservice-classroom/internal/classroom/domain"
 )
 
 type deleteSubscriptionRequest struct {
-	UUID string `json:"uuid" validate:"required"`
+	UUID uuid.UUID `json:"uuid" validate:"required"`
 }
 
 func NewDeleteSubscriptionHandler(s domain.ServiceInterface, opts ...kithttp.ServerOption) *kithttp.Server {
@@ -49,7 +51,9 @@ func decodeDeleteSubscriptionRequest(ctx context.Context, r *http.Request) (inte
 		return nil, fmt.Errorf("invalid argument")
 	}
 
-	return deleteSubscriptionRequest{UUID: id}, nil
+	uid := uuid.MustParse(id)
+
+	return deleteSubscriptionRequest{UUID: uid}, nil
 }
 
 func encodeDeleteSubscriptionResponse(ctx context.Context, w http.ResponseWriter, response interface{}) error {

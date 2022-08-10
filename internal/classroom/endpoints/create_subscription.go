@@ -11,19 +11,21 @@ import (
 
 	"github.com/go-kit/kit/endpoint"
 	kithttp "github.com/go-kit/kit/transport/http"
+
+	"github.com/google/uuid"
 )
 
 type createSubscriptionRequest struct {
-	UserID      string `json:"user_id" validate:"required"`
-	ClassroomID string `json:"classroom_id" validate:"required"`
-	Role        string `json:"role"`
+	UserID      uuid.UUID `json:"user_id" validate:"required"`
+	ClassroomID uuid.UUID `json:"classroom_id" validate:"required"`
+	Role        string    `json:"role"`
 }
 
 type createSubscriptionResponse struct {
-	UUID        string `json:"uuid"`
-	UserID      string `json:"user_id"`
-	ClassroomID string `json:"classroom_id"`
-	Role        string `json:"role"`
+	UUID        uuid.UUID `json:"uuid"`
+	UserID      uuid.UUID `json:"user_id"`
+	ClassroomID uuid.UUID `json:"classroom_id"`
+	Role        string    `json:"role"`
 }
 
 func NewCreateSubscriptionHandler(s domain2.ServiceInterface, opts ...kithttp.ServerOption) *kithttp.Server {

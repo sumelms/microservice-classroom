@@ -56,3 +56,13 @@ func (s *Service) RemoveLesson(ctx context.Context, classroomID, lessonID uuid.U
 	//TODO implement me
 	panic("implement me")
 }
+
+func (s *Service) Subscription(ctx context.Context, id uuid.UUID) (Subscription, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (s *Service) Subscriptions(ctx context.Context) ([]Subscription, error) {
+	//TODO implement me
+	panic("implement me")
+}

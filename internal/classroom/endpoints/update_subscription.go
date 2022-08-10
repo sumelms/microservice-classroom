@@ -14,19 +14,20 @@ import (
 
 	"github.com/go-kit/kit/endpoint"
 	kithttp "github.com/go-kit/kit/transport/http"
+	"github.com/google/uuid"
 )
 
 type updateSubscriptionRequest struct {
-	UUID        string `json:"uuid" validate:"required"`
-	UserID      string `json:"user_id" validate:"required"`
-	ClassroomID string `json:"classroom_id" validate:"required"`
-	Role        string `json:"role"`
+	UUID        uuid.UUID `json:"uuid" validate:"required"`
+	UserID      uuid.UUID `json:"user_id" validate:"required"`
+	ClassroomID uuid.UUID `json:"classroom_id" validate:"required"`
+	Role        string    `json:"role"`
 }
 
 type updateSubscriptionResponse struct {
-	UUID        string    `json:"uuid"`
-	UserID      string    `json:"user_id"`
-	ClassroomID string    `json:"classroom_id"`
+	UUID        uuid.UUID `json:"uuid"`
+	UserID      uuid.UUID `json:"user_id"`
+	ClassroomID uuid.UUID `json:"classroom_id"`
 	Role        string    `json:"role"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
@@ -86,7 +87,7 @@ func decodeUpdateSubscriptionRequest(ctx context.Context, r *http.Request) (inte
 		return nil, err
 	}
 
-	req.UUID = id
+	req.UUID = uuid.MustParse(id)
 
 	return req, nil
 }

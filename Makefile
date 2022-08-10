@@ -14,7 +14,7 @@ GOLANGCI_LINT := $(GOBIN)/golangci-lint
 VERSION := $(shell git describe --tags --exact-match 2>/dev/null || echo latest)
 MICROSERVICE_NAME := classroom
 BINARY_NAME := sumelms-${MICROSERVICE_NAME}
-RUN_FLAGS ?= 
+RUN_FLAGS ?=
 CONFIG_PATH ?= ./config/config.yml
 
 # Container
@@ -55,6 +55,22 @@ build: ## Generate the microservice binary
 .PHONY: build-proto
 build-proto: ## Compiles the protobuf
 	protoc --go-grpc_out=proto --go_out=proto proto/**/*.proto
+
+.PHONY: migrations-up
+migrations-up: ## Runs the migrations
+	go run cmd/migration/main.go up $(args)
+
+.PHONY: migrations-down
+migrations-down: ## Revert the migrations
+	go run cmd/migration/main.go down $(args)
+
+.PHONY: migrations-create
+migrations-create: ## Create a new migration
+	go run cmd/migration/main.go create $(args)
+
+.PHONY: swagger
+swagger: ## Generate Swagger Documentation
+	swag init -g swagger.go -d ./internal -o ./swagger
 
 ## --------------------------------------
 ## Linting

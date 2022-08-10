@@ -1,12 +1,16 @@
 package domain
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type Subscription struct {
 	ID          uint       `json:"id"`
-	UUID        string     `json:"uuid"`
-	UserID      string     `json:"user_id"`
-	ClassroomID string     `json:"classroom_id"`
+	UUID        uuid.UUID  `json:"uuid"`
+	UserID      uuid.UUID  `json:"user_id"`
+	ClassroomID uuid.UUID  `json:"classroom_id"`
 	Role        string     `json:"role"`
 	ExpiresAt   *time.Time `json:"expires_at"`
 	CreatedAt   time.Time  `json:"created_at"`

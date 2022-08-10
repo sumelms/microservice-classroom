@@ -2,8 +2,9 @@ package endpoints
 
 import (
 	"context"
-	"github.com/sumelms/microservice-classroom/internal/classroom/domain"
 	"net/http"
+
+	"github.com/sumelms/microservice-classroom/internal/classroom/domain"
 
 	"github.com/go-kit/kit/endpoint"
 	kithttp "github.com/go-kit/kit/transport/http"
@@ -24,7 +25,7 @@ func NewListClassroomHandler(s domain.ServiceInterface, opts ...kithttp.ServerOp
 
 func makeListClassroomEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		classrooms, err := s.ListClassroom(ctx)
+		classrooms, err := s.Classrooms(ctx)
 		if err != nil {
 			return nil, err
 		}
