@@ -1,6 +1,6 @@
 module github.com/sumelms/microservice-classroom
 
-go 1.18
+go 1.19
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
@@ -16,7 +16,6 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/sherifabdlnaby/configuro v0.0.2
 	github.com/spf13/cobra v1.5.0
-	github.com/sumelms/microservice-course v0.0.0-20220808204916-f6b6c4003b0f
 	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4
 )
 
@@ -30,6 +29,7 @@ require (
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.0.1 // indirect
+	github.com/jackc/fake v0.0.0-20150926172116-812a484cc733 // indirect
 	github.com/joho/godotenv v1.4.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
