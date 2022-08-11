@@ -62,6 +62,9 @@ func makeUpdateSubscriptionEndpoint(s domain2.ServiceInterface) endpoint.Endpoin
 		}
 
 		updated, err := s.UpdateSubscription(ctx, &sub)
+		if err != nil {
+			return nil, err
+		}
 
 		return updateSubscriptionResponse{
 			UUID:        updated.UUID,

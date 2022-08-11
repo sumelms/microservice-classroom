@@ -12,12 +12,15 @@ const (
 
 func queriesClassroom() map[string]string {
 	return map[string]string{
-		createClassroom: "INSERT INTO classrooms (name, description) VALUES ($1, $2) RETURNING *",
+		createClassroom: `INSERT INTO classrooms (code, name, description, format, subject_id, course_id) 
+			VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
 		deleteClassroom: "UPDATE classrooms SET deleted_at = NOW() WHERE uuid = $1",
 		getClassroom:    "SELECT * FROM classrooms WHERE uuid = $1",
 		listClassroom:   "SELECT * FROM classrooms",
-		updateClassroom: "UPDATE classrooms SET name = $1, description = $2 WHERE uuid = $3 RETURNING *",
-		addLesson:       "INSERT INTO classroom_lessons (classroom_id, lesson_id) VALUES($1, $2)",
-		removeLesson:    "UPDATE classroom_lessons SET deleted_at = NOW() WHERE classroom_id = $1 AND lesson_id = $2",
+		updateClassroom: `UPDATE classrooms 
+			SET code = $1, name = $2, description = $3, format = $4, subject_id = $5, course_id = $6 
+			WHERE uuid = $3 RETURNING *`,
+		addLesson:    "INSERT INTO classroom_lessons (classroom_id, lesson_id) VALUES($1, $2)",
+		removeLesson: "UPDATE classroom_lessons SET deleted_at = NOW() WHERE uuid = $1",
 	}
 }

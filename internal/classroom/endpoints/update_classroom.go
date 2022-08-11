@@ -18,21 +18,25 @@ import (
 )
 
 type updateClassroomRequest struct {
-	UUID        uuid.UUID `json:"uuid" validate:"required"`
-	Title       string    `json:"title" validate:"required,max=100"`
-	Description string    `json:"description" validate:"required,max=255"`
-	SubjectID   uuid.UUID `json:"subject_id" validate:"required"`
-	CourseID    uuid.UUID `json:"course_id" validate:"required"`
+	UUID        uuid.UUID  `json:"uuid" validate:"required"`
+	Code        string     `json:"code" validate:"required,max=15"`
+	Name        string     `json:"name" validate:"required,max=100"`
+	Description string     `json:"description" validate:"required,max=255"`
+	Format      string     `json:"format" validate:"classroom_format"`
+	SubjectID   *uuid.UUID `json:"subject_id" validate:"required"`
+	CourseID    uuid.UUID  `json:"course_id" validate:"required"`
 }
 
 type updateClassroomResponse struct {
-	UUID        uuid.UUID `json:"uuid"`
-	Title       string    `json:"title"`
-	Description string    `json:"description"`
-	SubjectID   uuid.UUID `json:"subject_id"`
-	CourseID    uuid.UUID `json:"course_id"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
+	UUID        uuid.UUID  `json:"uuid"`
+	Code        string     `json:"code"`
+	Name        string     `json:"name"`
+	Description string     `json:"description"`
+	Format      string     `json:"format"`
+	SubjectID   *uuid.UUID `json:"subject_id,omitempty"`
+	CourseID    uuid.UUID  `json:"course_id"`
+	CreatedAt   time.Time  `json:"created_at"`
+	UpdatedAt   time.Time  `json:"updated_at"`
 }
 
 func NewUpdateClassroomHandler(s domain.ServiceInterface, opts ...kithttp.ServerOption) *kithttp.Server {
@@ -62,7 +66,9 @@ func makeUpdateClassroomEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
 		if err != nil {
 			return nil, err
 		}
-		c.SubjectID = req.SubjectID
+		if req.SubjectID != nil {
+			c.SubjectID = req.SubjectID
+		}
 		c.CourseID = req.CourseID
 
 		updated, err := s.UpdateClassroom(ctx, &c)
@@ -72,10 +78,12 @@ func makeUpdateClassroomEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
 
 		return updateClassroomResponse{
 			UUID:        updated.UUID,
-			Title:       updated.Title,
+			Code:        updated.Code,
+			Name:        updated.Name,
+			Description: updated.Description,
+			Format:      updated.Format,
 			SubjectID:   updated.SubjectID,
 			CourseID:    updated.CourseID,
-			Description: updated.Description,
 		}, nil
 	}
 }
