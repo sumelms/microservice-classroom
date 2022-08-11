@@ -25,6 +25,7 @@ type Classroom struct {
 
 type ClassroomLesson struct {
 	ID               uint       `json:"id"`
+	UUID             uuid.UUID  `json:"uuid"`
 	ClassroomID      uuid.UUID  `db:"classroom_id" json:"classroom_id"`
 	SyllabusLessonID uuid.UUID  `db:"syllabus_lessons_id" json:"syllabus_lessons_id"`
 	StartsAt         time.Time  `db:"starts_at" json:"starts_at"`

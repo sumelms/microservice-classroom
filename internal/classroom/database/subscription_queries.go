@@ -10,10 +10,15 @@ const (
 
 func queriesSubscription() map[string]string {
 	return map[string]string{
-		createSubscription: "INSERT INTO subscriptions (course_id, matrix_id, user_id, valid_until) VALUES ($1, $2, $3, $4) RETURNING *",
-		deleteSubscription: "UPDATE subscriptions SET deleted_at = NOW() WHERE id = $1",
-		getSubscription:    "SELECT * FROM subscriptions WHERE id = $1",
+		createSubscription: `INSERT INTO subscriptions (user_id, classroom_id, role, expires_at) 
+			VALUES (:user_id, :classroom_id, :role, :expires_at) 
+			RETURNING *`,
+		deleteSubscription: `UPDATE subscriptions SET deleted_at = NOW() WHERE uuid = :uuid`,
+		getSubscription:    "SELECT * FROM subscriptions WHERE uuid = :uuid",
 		listSubscription:   "SELECT * FROM subscriptions",
-		updateSubscription: "UPDATE subscriptions SET user_id = $1, course_id = $2, matrix_id = $3, valid_until = $4 WHERE id = $5 RETURNING *",
+		updateSubscription: `UPDATE subscriptions 
+			SET user_id = :user_id, classroom_id = :classroom_id, expires_at = :expires_at 
+			WHERE id = :uuid 
+			RETURNING *`,
 	}
 }
