@@ -18,24 +18,30 @@ import (
 )
 
 type createClassroomRequest struct {
-	Code        string     `json:"code" validate:"required,max=15"`
-	Name        string     `json:"name" validate:"required,max=100"`
-	Description string     `json:"description" validate:"required,max=255"`
-	Format      string     `json:"format" validate:"classroom_format"`
-	SubjectID   *uuid.UUID `json:"subject_id"`
-	CourseID    uuid.UUID  `json:"course_id" validate:"required"`
+	Code         string     `json:"code" validate:"required,max=15"`
+	Name         string     `json:"name" validate:"required,max=100"`
+	Description  string     `json:"description" validate:"max=255"`
+	Format       string     `json:"format" validate:"classroom_format"`
+	CabSubscribe bool       `json:"cab_subscribe"`
+	SubjectID    *uuid.UUID `json:"subject_id"`
+	CourseID     uuid.UUID  `json:"course_id" validate:"required"`
+	StartsAt     time.Time  `json:"starts_at" validate:"required"`
+	EndsAt       *time.Time `json:"ends_at"`
 }
 
 type createClassroomResponse struct {
-	UUID        uuid.UUID  `json:"uuid"`
-	Code        string     `json:"code"`
-	Name        string     `json:"name"`
-	Description string     `json:"description"`
-	Format      string     `json:"format"`
-	SubjectID   *uuid.UUID `json:"subject_id,omitempty"`
-	CourseID    uuid.UUID  `json:"course_id"`
-	CreatedAt   time.Time  `json:"created_at"`
-	UpdatedAt   time.Time  `json:"updated_at"`
+	UUID         uuid.UUID  `json:"uuid"`
+	Code         string     `json:"code"`
+	Name         string     `json:"name"`
+	Description  string     `json:"description"`
+	Format       string     `json:"format"`
+	CanSubscribe bool       `json:"can_subscribe"`
+	SubjectID    *uuid.UUID `json:"subject_id,omitempty"`
+	CourseID     uuid.UUID  `json:"course_id"`
+	StartsAt     time.Time  `json:"starts_at" validate:"required"`
+	EndsAt       *time.Time `json:"ends_at,omitempty"`
+	CreatedAt    time.Time  `json:"created_at"`
+	UpdatedAt    time.Time  `json:"updated_at"`
 }
 
 func NewCreateClassroomHandler(s domain.ServiceInterface, opts ...kithttp.ServerOption) *kithttp.Server {
@@ -77,14 +83,18 @@ func makeCreateClassroomEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
 		}
 
 		return createClassroomResponse{
-			UUID:        created.UUID,
-			Name:        created.Name,
-			Description: created.Description,
-			Format:      created.Format,
-			SubjectID:   created.SubjectID,
-			CourseID:    created.CourseID,
-			CreatedAt:   created.CreatedAt,
-			UpdatedAt:   created.UpdatedAt,
+			UUID:         created.UUID,
+			Code:         created.Code,
+			Name:         created.Name,
+			Description:  created.Description,
+			Format:       created.Format,
+			CanSubscribe: created.CanSubscribe,
+			SubjectID:    created.SubjectID,
+			CourseID:     created.CourseID,
+			StartsAt:     created.StartsAt,
+			EndsAt:       created.EndsAt,
+			CreatedAt:    created.CreatedAt,
+			UpdatedAt:    created.UpdatedAt,
 		}, err
 	}
 }

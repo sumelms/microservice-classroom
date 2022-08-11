@@ -34,15 +34,18 @@ func makeListClassroomEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
 		for i := range classrooms {
 			c := classrooms[i]
 			list = append(list, findClassroomResponse{
-				UUID:        c.UUID,
-				Code:        c.Code,
-				Name:        c.Name,
-				Description: c.Description,
-				Format:      c.Format,
-				SubjectID:   c.SubjectID,
-				CourseID:    c.CourseID,
-				CreatedAt:   c.CreatedAt,
-				UpdatedAt:   c.UpdatedAt,
+				UUID:         c.UUID,
+				Code:         c.Code,
+				Name:         c.Name,
+				Description:  c.Description,
+				Format:       c.Format,
+				CanSubscribe: c.CanSubscribe,
+				StartsAt:     c.StartsAt,
+				EndsAt:       c.EndsAt,
+				SubjectID:    c.SubjectID,
+				CourseID:     c.CourseID,
+				CreatedAt:    c.CreatedAt,
+				UpdatedAt:    c.UpdatedAt,
 			})
 		}
 

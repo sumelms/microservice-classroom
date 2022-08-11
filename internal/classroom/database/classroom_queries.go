@@ -12,15 +12,20 @@ const (
 
 func queriesClassroom() map[string]string {
 	return map[string]string{
-		createClassroom: `INSERT INTO classrooms (code, name, description, format, subject_id, course_id) 
-			VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
-		deleteClassroom: "UPDATE classrooms SET deleted_at = NOW() WHERE uuid = $1",
-		getClassroom:    "SELECT * FROM classrooms WHERE uuid = $1",
+		createClassroom: `INSERT INTO classrooms (code, name, description, format, can_subscribe, 
+					starts_at, ends_at, subject_id, course_id) 
+			VALUES (:code, :name, :description, :format, :can_subscribe, 
+			        :starts_at, :ends_at, :subject_id, :course_id) 
+			RETURNING *`,
+		deleteClassroom: "UPDATE classrooms SET deleted_at = NOW() WHERE uuid = :uuid",
+		getClassroom:    "SELECT * FROM classrooms WHERE uuid = :uuid",
 		listClassroom:   "SELECT * FROM classrooms",
 		updateClassroom: `UPDATE classrooms 
-			SET code = $1, name = $2, description = $3, format = $4, subject_id = $5, course_id = $6 
-			WHERE uuid = $3 RETURNING *`,
-		addLesson:    "INSERT INTO classroom_lessons (classroom_id, lesson_id) VALUES($1, $2)",
-		removeLesson: "UPDATE classroom_lessons SET deleted_at = NOW() WHERE uuid = $1",
+			SET code = :code, name = :name, description = :description, format = :format, can_subscribe = :can_subscribe,
+			    starts_at = :starts_at, ends_at = :ends_at, subject_id = :subject_id, course_id = :course_id
+			WHERE uuid = :uuid 
+			RETURNING *`,
+		addLesson:    "INSERT INTO classroom_lessons (classroom_id, lesson_id) VALUES(:classroom_id, :lesson_id)",
+		removeLesson: "UPDATE classroom_lessons SET deleted_at = NOW() WHERE uuid = :uuid",
 	}
 }

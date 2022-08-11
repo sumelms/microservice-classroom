@@ -19,15 +19,18 @@ type findClassroomRequest struct {
 }
 
 type findClassroomResponse struct {
-	UUID        uuid.UUID  `json:"uuid"`
-	Code        string     `json:"code"`
-	Name        string     `json:"name"`
-	Description string     `json:"description"`
-	Format      string     `json:"format"`
-	SubjectID   *uuid.UUID `json:"subject_id,omitempty"`
-	CourseID    uuid.UUID  `json:"course_id"`
-	CreatedAt   time.Time  `json:"created_at"`
-	UpdatedAt   time.Time  `json:"updated_at"`
+	UUID         uuid.UUID  `json:"uuid"`
+	Code         string     `json:"code"`
+	Name         string     `json:"name"`
+	Description  string     `json:"description"`
+	Format       string     `json:"format"`
+	CanSubscribe bool       `json:"can_subscribe"`
+	SubjectID    *uuid.UUID `json:"subject_id,omitempty"`
+	CourseID     uuid.UUID  `json:"course_id"`
+	StartsAt     time.Time  `json:"starts_at"`
+	EndsAt       *time.Time `json:"ends_at,omitempty"`
+	CreatedAt    time.Time  `json:"created_at"`
+	UpdatedAt    time.Time  `json:"updated_at"`
 }
 
 func NewFindClassroomHandler(s domain.ServiceInterface, opts ...kithttp.ServerOption) *kithttp.Server {
@@ -52,11 +55,17 @@ func makeFindClassroomEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
 		}
 
 		return &findClassroomResponse{
-			UUID:        c.UUID,
-			Name:        c.Name,
-			SubjectID:   c.SubjectID,
-			CourseID:    c.CourseID,
-			Description: c.Description,
+			UUID:         c.UUID,
+			Name:         c.Name,
+			Description:  c.Description,
+			Format:       c.Format,
+			CanSubscribe: c.CanSubscribe,
+			SubjectID:    c.SubjectID,
+			CourseID:     c.CourseID,
+			StartsAt:     c.StartsAt,
+			EndsAt:       c.EndsAt,
+			CreatedAt:    c.CreatedAt,
+			UpdatedAt:    c.UpdatedAt,
 		}, nil
 	}
 }
