@@ -4,12 +4,9 @@
 </p>
 
 <p align="center">
-  <a href="https://travis-ci.com/sumelms/microservice-classroom">
-    <img alt="Travis" src="https://travis-ci.com/sumelms/microservice-classroom.svg?branch=main">
-  </a>  
-  <a href="https://codecov.io/gh/sumelms/microservice-classroom">
-    <img alt="Codeconv" src="https://codecov.io/gh/sumelms/backend/microservice-classroom/main/graph/badge.svg?token=8E92BS3SR9" />
-  </a>
+  <a href="https://codecov.io/gh/sumelms/microservice-classroom" >
+    <img src="https://codecov.io/gh/sumelms/microservice-classroom/branch/main/graph/badge.svg?token=B78WZL5QDY"/>
+    </a>
   <img alt="GitHub" src="https://img.shields.io/github/license/sumelms/microservice-classroom">
   <a href="https://discord.gg/Yh9q9cd">
     <img alt="Discord" src="https://img.shields.io/discord/726500188021063682">
@@ -44,13 +41,13 @@ and scalability to your learning environment.
 - [Documentation](#documentation)
 - [Contributing](#contributing)
 - [Code of Conduct](#code-of-conduct)
-- [Team](#team)
+- [Contributors](#contributors)
 - [Support](#support)
 - [License](#license)
 
 ## Prerequisites
 
-- Go >= 1.14.6
+- Go >= 1.18
 - PostgreSQL >= 9.5 (with `uuid-ossp` extension)
 
 ## Prepare
@@ -58,7 +55,7 @@ and scalability to your learning environment.
 Clone the repository
 
 ```bash
-$ git clone [git@github.com](mailto:git@github.com):sumelms/microservice-classroom.git
+$ git clone git@github.com:sumelms/microservice-classroom.git
 ```
 
 Access the project folder, and download the Go dependencies
@@ -96,6 +93,20 @@ $ make container-build
 ```
 
 If everything works, you can now [run the microservice using the container image](#running).
+
+### Local database
+
+You can have your local database running the following command:
+
+```bash
+$ docker-compose up -d postgres
+```
+
+And then you could run the migrations using
+
+```bash
+$ make migrations-up
+```
 
 ## Running
 
@@ -169,7 +180,7 @@ The complete Sumé LMS documentation can be found in our [official website](http
 
 ### API
 
-This project uses [Swagger](https://swagger.io/) to generate the API documentation and API mockup, the files can be found  `swagger` directory. 
+This project uses [Swagger](https://swagger.io/) to generate the API documentation and API mockup, the files can be found  `swagger` directory.
 
 Sometimes, a microservice can cover more than one domain boundary, in this case, the API scheme should be stored in the same directory indicated above, but following the following filename convention: `<domain-name>-api.yaml`
 
@@ -184,16 +195,13 @@ all make sure to read our [Contributor Guideline](https://sumelms.com/docs/contr
 
 Would you like to contribute and participate in our communities? Please read our [Code of Conduct](https://sumelms.com/docs/conduct).
 
-## Team
+## Contributors
 
-### Core
+<a href="https://github.com/sumelms/microservice-classroom/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=sumelms/microservice-classroom" />
+</a>
 
-- Ricardo Lüders (@rluders)
-- Ariane Rocha (@arianerocha)
-
-### Contributors
-
-...
+Made with [contrib.rocks](https://contrib.rocks).
 
 ## Support
 
@@ -206,7 +214,6 @@ find help and get in touch with the community.
 
 If you found a bug or have a feature request, the best way to do
 it is [opening an issue](https://github.com/sumelms/microservice-classroom/issues).
-
 
 ## License
 

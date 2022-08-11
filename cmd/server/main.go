@@ -8,43 +8,51 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/sumelms/microservice-classroom/internal/classroom"
-	"github.com/sumelms/microservice-classroom/internal/classroomlesson"
-	"github.com/sumelms/microservice-classroom/internal/lesson"
-	"github.com/sumelms/microservice-classroom/internal/subscription"
-
-	"github.com/go-kit/kit/log"
 	"github.com/gorilla/mux"
-	"github.com/sumelms/microservice-classroom/pkg/config"
+
+	"github.com/go-kit/log"
 	"golang.org/x/sync/errgroup"
 
-	database "github.com/sumelms/microservice-classroom/pkg/database/gorm"
+	"github.com/sumelms/microservice-classroom/internal/classroom"
+	"github.com/sumelms/microservice-classroom/pkg/config"
+	database "github.com/sumelms/microservice-classroom/pkg/database/postgres"
+
 	applogger "github.com/sumelms/microservice-classroom/pkg/logger"
 
 	_ "github.com/lib/pq"
 )
 
-func main() {
-	var (
-		logger     log.Logger
-		httpServer *http.Server
-	)
+var (
+	logger     log.Logger
+	httpServer *http.Server
+)
 
+//nolint:funlen
+func main() {
 	// Logger
 	logger = applogger.NewLogger()
-	logger.Log("msg", "service started") // nolint: errcheck
+	logger.Log("msg", "service started") //nolint: errcheck
 
 	// Configuration
 	cfg, err := loadConfig()
 	if err != nil {
-		logger.Log("exit", err) // nolint: errcheck
+		logger.Log("exit", err) //nolint: errcheck
 		os.Exit(-1)
 	}
 
 	// Database
 	db, err := database.Connect(cfg.Database)
 	if err != nil {
-		logger.Log("msg", "database error", err) // nolint: errcheck
+		logger.Log("msg", "database error", err) //nolint: errcheck
+		os.Exit(1)
+	}
+
+	// Initialize the domain services
+	svcLogger := log.With(logger, "component", "service")
+
+	classroomSvc, err := classroom.NewService(db, svcLogger)
+	if err != nil {
+		logger.Log("msg", "unable to start classroom service", err) //nolint: errcheck
 		os.Exit(1)
 	}
 
@@ -59,29 +67,31 @@ func main() {
 	g, ctx := errgroup.WithContext(ctx)
 
 	g.Go(func() error {
-		httpLogger := log.With(logger, "component", "http")
-
-		srv := http.NewServeMux()
+		// Initialize the router
 		router := mux.NewRouter()
 
-		// Initializing the services
-		classroom.NewHTTPService(router, db, httpLogger)
-		classroomlesson.NewHTTPService(router, db, httpLogger)
-		subscription.NewHTTPService(router, db, httpLogger)
-		lesson.NewHTTPService(router, db, httpLogger)
+		// Initializing the HTTP Services
+		httpLogger := log.With(logger, "component", "http")
 
-		// Handle the router
+		if err := classroom.NewHTTPService(router, classroomSvc, httpLogger); err != nil {
+			logger.Log("msg", "unable to start a service: classroom", "error", err) //nolint: errcheck
+			return err
+		}
+
+		// Handle the mux & router
+		srv := http.NewServeMux()
 		srv.Handle("/", router)
 
 		// Middlewares
 		http.Handle("/", accessControl(srv))
 
-		logger.Log("transport", "http", "address", cfg.Server.HTTP.Host, "msg", "listening") // nolint: errcheck
+		logger.Log("transport", "http", "address", cfg.Server.HTTP.Host, "msg", "listening") //nolint: errcheck
 
 		httpServer = &http.Server{
-			Addr:         cfg.Server.HTTP.Host,
-			ReadTimeout:  10 * time.Second,
-			WriteTimeout: 10 * time.Second,
+			Addr:              cfg.Server.HTTP.Host,
+			ReadTimeout:       10 * time.Second,
+			WriteTimeout:      10 * time.Second,
+			ReadHeaderTimeout: 2 * time.Second,
 		}
 
 		if err := httpServer.ListenAndServe(); err != http.ErrServerClosed {
@@ -97,23 +107,24 @@ func main() {
 		break
 	}
 
-	logger.Log("msg", "received shutdown signal") // nolint: errcheck
-
-	cancel()
+	logger.Log("msg", "received shutdown signal") //nolint: errcheck
 
 	shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer shutdownCancel()
 
 	if httpServer != nil {
-		httpServer.Shutdown(shutdownCtx) // nolint: errcheck
+		if err := httpServer.Shutdown(shutdownCtx); err != nil {
+			logger.Log("msg", "server wasn't gracefully shutdown") //nolint: errcheck
+			defer os.Exit(2)
+		}
 	}
 
 	if err := g.Wait(); err != nil {
-		logger.Log("msg", "server returning an error", "error", err) // nolint: errcheck
+		logger.Log("msg", "server returning an error", "error", err) //nolint: errcheck
 		defer os.Exit(2)
 	}
 
-	logger.Log("msg", "service ended") // nolint: errcheck
+	logger.Log("msg", "service ended") //nolint: errcheck
 }
 
 func loadConfig() (*config.Config, error) {

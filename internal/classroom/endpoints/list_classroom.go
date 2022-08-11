@@ -2,8 +2,9 @@ package endpoints
 
 import (
 	"context"
-	"github.com/sumelms/microservice-classroom/internal/classroom/domain"
 	"net/http"
+
+	"github.com/sumelms/microservice-classroom/internal/classroom/domain"
 
 	"github.com/go-kit/kit/endpoint"
 	kithttp "github.com/go-kit/kit/transport/http"
@@ -24,7 +25,7 @@ func NewListClassroomHandler(s domain.ServiceInterface, opts ...kithttp.ServerOp
 
 func makeListClassroomEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		classrooms, err := s.ListClassroom(ctx)
+		classrooms, err := s.Classrooms(ctx)
 		if err != nil {
 			return nil, err
 		}
@@ -33,13 +34,18 @@ func makeListClassroomEndpoint(s domain.ServiceInterface) endpoint.Endpoint {
 		for i := range classrooms {
 			c := classrooms[i]
 			list = append(list, findClassroomResponse{
-				UUID:        c.UUID,
-				Title:       c.Title,
-				Description: c.Description,
-				SubjectID:   c.SubjectID,
-				CourseID:    c.CourseID,
-				CreatedAt:   c.CreatedAt,
-				UpdatedAt:   c.UpdatedAt,
+				UUID:         c.UUID,
+				Code:         c.Code,
+				Name:         c.Name,
+				Description:  c.Description,
+				Format:       c.Format,
+				CanSubscribe: c.CanSubscribe,
+				StartsAt:     c.StartsAt,
+				EndsAt:       c.EndsAt,
+				SubjectID:    c.SubjectID,
+				CourseID:     c.CourseID,
+				CreatedAt:    c.CreatedAt,
+				UpdatedAt:    c.UpdatedAt,
 			})
 		}
 

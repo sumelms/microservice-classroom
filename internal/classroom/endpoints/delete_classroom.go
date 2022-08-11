@@ -3,16 +3,18 @@ package endpoints
 import (
 	"context"
 	"fmt"
-	"github.com/sumelms/microservice-classroom/internal/classroom/domain"
 	"net/http"
+
+	"github.com/sumelms/microservice-classroom/internal/classroom/domain"
 
 	"github.com/go-kit/kit/endpoint"
 	kithttp "github.com/go-kit/kit/transport/http"
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 )
 
 type deleteClassroomRequest struct {
-	UUID string `json:"uuid" validate:"required"`
+	UUID uuid.UUID `json:"uuid" validate:"required"`
 }
 
 func NewDeleteClassroomHandler(s domain.ServiceInterface, opts ...kithttp.ServerOption) *kithttp.Server {
@@ -47,7 +49,9 @@ func decodeDeleteClassroomRequest(_ context.Context, r *http.Request) (interface
 		return nil, fmt.Errorf("invalid argument")
 	}
 
-	return deleteClassroomRequest{UUID: id}, nil
+	uid := uuid.MustParse(id)
+
+	return deleteClassroomRequest{UUID: uid}, nil
 }
 
 func encodeDeleteClassroomResponse(ctx context.Context, w http.ResponseWriter, response interface{}) error {
