@@ -4,6 +4,12 @@
 </p>
 
 <p align="center">
+  <a href="https://goreportcard.com/badge/github.com/sumelms/microservice-classroom">
+    <img alt="goreportcard" src="https://goreportcard.com/badge/github.com/sumelms/microservice-classroom" />
+  </a>
+  <a href="https://github.com/sumelms/microservice-classroom/actions/workflows/main.yaml">
+    <img alt="github action" src="https://github.com/sumelms/microservice-classroom/actions/workflows/main.yaml/badge.svg" />
+  </a>
   <a href="https://codecov.io/gh/sumelms/microservice-classroom" >
     <img src="https://codecov.io/gh/sumelms/microservice-classroom/branch/main/graph/badge.svg?token=B78WZL5QDY"/>
     </a>
