@@ -111,7 +111,7 @@ $ docker-compose up -d postgres
 And then you could run the migrations using
 
 ```bash
-$ make migrations-up
+$ make migration-up
 ```
 
 ## Running
