@@ -1,5 +1,5 @@
 BEGIN;
 
-DROP TABLE classrooms;
+DROP TABLE classroom_lessons;
 
 COMMIT;
