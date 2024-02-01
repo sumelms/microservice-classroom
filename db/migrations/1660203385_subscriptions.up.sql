@@ -1,7 +1,5 @@
 BEGIN;
 
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 CREATE TABLE subscriptions
 (
     id              bigserial       CONSTRAINT subscriptions_pk PRIMARY KEY,
@@ -17,5 +15,7 @@ CREATE TABLE subscriptions
 
 CREATE UNIQUE INDEX subscriptions_id_uindex
     ON subscriptions (id);
+CREATE UNIQUE INDEX subscriptions_uuid_uindex
+    ON subscriptions (uuid);
 
 COMMIT;

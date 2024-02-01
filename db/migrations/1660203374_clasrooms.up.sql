@@ -1,7 +1,5 @@
 BEGIN;
 
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 CREATE TABLE classrooms
 (
     id              bigserial       CONSTRAINT classrooms_pk PRIMARY KEY,
