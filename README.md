@@ -53,8 +53,8 @@ and scalability to your learning environment.
 
 ## Prerequisites
 
-- Go >= 1.19
-- PostgreSQL >= 9.5 (with `uuid-ossp` extension)
+- Go >= 1.21
+- PostgreSQL >= 16.0
 
 ## Prepare
 
